@@ -14,7 +14,7 @@ fn main() {
         .expect("Failed to create window");
     window.set_all_polling(true);
     let size = window.get_framebuffer_size();
-    
+
     let instance = wgpu::Instance::new();
     let adapter = instance.request_adapter(&wgpu::RequestAdapterOptions {
         power_preference: wgpu::PowerPreference::LowPower,
@@ -88,7 +88,12 @@ fn main() {
         },
     );
 
+    let mut last_time = std::time::Instant::now();
     while !window.should_close() {
+        let elapsed = last_time.elapsed().as_secs_f64();
+        println!("FPS: {}", 1.0 / elapsed);
+        last_time = std::time::Instant::now();
+
         glfw.poll_events();
         for (_, event) in glfw::flush_messages(&events) {
             match event {
